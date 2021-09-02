@@ -2626,6 +2626,13 @@
   resolved "https://registry.npmjs.org/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
+"@types/papaparse@^5.0.4":
+  version "5.2.6"
+  resolved "https://registry.yarnpkg.com/@types/papaparse/-/papaparse-5.2.6.tgz#0bba18de4d15eff65883bc7c0794e0134de9e7c7"
+  integrity sha512-xGKSd0UTn58N1h0+zf8mW863Rv8BvXcGibEgKFtBIXZlcDXAmX/T4RdDO2mwmrmOypUDt5vRgo2v32a78JdqUA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.npmjs.org/@types/parse-json/-/parse-json-4.0.0.tgz"
@@ -4912,6 +4919,31 @@ cssstyle@^2.2.0:
   dependencies:
     cssom "~0.3.6"
 
+csv-generate@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/csv-generate/-/csv-generate-3.4.2.tgz#65f901ef210cad160d8359b5b4748d6bad547008"
+  integrity sha512-Bbk8HsUwd824v7lwGZO7TjoTT57tFdlF4SNkCu0pF6DLy0YkKWDNETqQ9KCkwYNu5N24xLIwNG7CiQ3QCSUf5g==
+
+csv-parse@^4.16.2:
+  version "4.16.2"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-4.16.2.tgz#cd7d25e9b9e1430ac6aa5ed9b5c1685e72d4a8d8"
+  integrity sha512-eq2BhB6JiIJaNv61pH5EC+o/iyCBxT+g6ukLu2UoNyS5daCN8YlzhOsLHGt/t9sGraMYt/aizaXPLQoNvxlIMw==
+
+csv-stringify@^5.6.4:
+  version "5.6.4"
+  resolved "https://registry.yarnpkg.com/csv-stringify/-/csv-stringify-5.6.4.tgz#8764c56c39eefc1539db47de3f3b90eb11be22f0"
+  integrity sha512-LnX2ft+6MX3CJKLoL4n9ZLIiaUKmPQLJixMbSfGC8wGNBn82UEdX9Fcg4f2HbpCTWqjIiLrxegQt2uorQo2NXw==
+
+csv@^5.5.2:
+  version "5.5.2"
+  resolved "https://registry.yarnpkg.com/csv/-/csv-5.5.2.tgz#c3ec41cefbad263eba9c2964126518264b978451"
+  integrity sha512-sVAhC1tYZW0Oy3P88bFVGbZZhFu+0bGSNjZJMjVxIJffSpHdFfxcIFK1ALtZMWYyfaxAIuYWGOobKGcXr2mVvw==
+  dependencies:
+    csv-generate "^3.4.2"
+    csv-parse "^4.16.2"
+    csv-stringify "^5.6.4"
+    stream-transform "^2.1.2"
+
 cyclist@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/cyclist/-/cyclist-1.0.1.tgz"
@@ -6408,6 +6440,11 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   integrity sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
+
+fs@^0.0.1-security:
+  version "0.0.1-security"
+  resolved "https://registry.yarnpkg.com/fs/-/fs-0.0.1-security.tgz#8a7bd37186b6dddf3813f23858b57ecaaf5e41d4"
+  integrity sha1-invTcYa23d84E/I4WLV+yq9eQdQ=
 
 fsevents@^1.2.7:
   version "1.2.13"
@@ -9197,6 +9234,11 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
+mixme@^0.5.0:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/mixme/-/mixme-0.5.1.tgz#b3da79a563b2da46efba9519830059e4c2a9e40f"
+  integrity sha512-NaeZIckeBFT7i0XBEpGyFcAE0/bLcQ9MHErTpnU3bLWVE5WZbxG5Y3fDsMxYGifTo5khDA42OquXCC2ngKJB+g==
+
 mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@^0.5.5, mkdirp@~0.5.1:
   version "0.5.5"
   resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.5.tgz"
@@ -9782,6 +9824,11 @@ pako@~1.0.2, pako@~1.0.5:
   version "1.0.11"
   resolved "https://registry.npmjs.org/pako/-/pako-1.0.11.tgz"
   integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
+
+papaparse@^5.2.0, papaparse@^5.3.1:
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-5.3.1.tgz#770b7a9124d821d4b2132132b7bd7dce7194b5b1"
+  integrity sha512-Dbt2yjLJrCwH2sRqKFFJaN5XgIASO9YOFeFP8rIBRG2Ain8mqk5r1M6DkfvqEVozVcz3r3HaUGw253hA1nLIcA==
 
 parallel-transform@^1.1.0:
   version "1.2.0"
@@ -11086,6 +11133,14 @@ react-is@^17.0.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.1.tgz"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
+react-papaparse@^3.17.1:
+  version "3.17.1"
+  resolved "https://registry.yarnpkg.com/react-papaparse/-/react-papaparse-3.17.1.tgz#f9cc8b0f383e1555acd61cc3bfc793139c15d433"
+  integrity sha512-Pe/eheSNMDJzJJWVtryp4A3GjzMzkop1G+a3xNPsBCkPN3YzgX3ed4Vfb4kbMjbYNqS3k2gevXjszHtyFZIWtg==
+  dependencies:
+    "@types/papaparse" "^5.0.4"
+    papaparse "^5.2.0"
+
 react-popper@^2.2.4:
   version "2.2.5"
   resolved "https://registry.npmjs.org/react-popper/-/react-popper-2.2.5.tgz"
@@ -12353,6 +12408,13 @@ stream-shift@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/stream-shift/-/stream-shift-1.0.1.tgz"
   integrity sha512-AiisoFqQ0vbGcZgQPY1cdP2I76glaVA/RauYR4G4thNFgkTqr90yXTo4LYX60Jl+sIlPNHHdGSwo01AvbKUSVQ==
+
+stream-transform@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/stream-transform/-/stream-transform-2.1.2.tgz#1f5f6ee8a663b38c7a57cf13de360b3de3fa89f6"
+  integrity sha512-EnqH5Fdzs6OQB651YsAw1Y78EznjC5B6ythbXIuAiS7r5JVJWGPU8iVDnxFvps/FpSdJIctCcFStamDEygovBg==
+  dependencies:
+    mixme "^0.5.0"
 
 streamsearch@0.1.2:
   version "0.1.2"
