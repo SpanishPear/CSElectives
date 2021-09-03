@@ -30,8 +30,7 @@ const DropdownSort = () => {
     <Dropdown
       placeholder='Most Popular'
       selection
-      fluid
-      compact
+
       button
       options = {options}
       defaultValue={options}

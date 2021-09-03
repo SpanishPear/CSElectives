@@ -66,6 +66,29 @@ const termOptions = [
   },
 ];
 
+const prefixOptions = [
+  {
+    key: 'COMP',
+    text: 'COMP',
+    value: 'COMP',
+  },
+  {
+    key: 'BINF',
+    text: 'BINF',
+    value: 'BINF',
+  },
+  {
+    key: 'ENGG',
+    text: 'ENGG',
+    value: 'ENGG',
+  },
+  {
+    key: 'SENG',
+    text: 'SENG',
+    value: 'SENG',
+  },
+];
+
 const HomePage = () => {
   const [activeTags, setActiveTags] = useState( [] );
 
@@ -93,11 +116,18 @@ const HomePage = () => {
             className='dropdown-tags'/>
         </div>
         <div className='dropdown-tags-box'>
+          <DropdownTags title='Prefix'
+            tagOptions = {prefixOptions}
+            setActiveTags={setActiveTags}
+            className='dropdown-tags'/>
+        </div>
+        <div className='dropdown-tags-box'>
           <DropdownTags title='Term Offering'
             tagOptions = {termOptions}
             setActiveTags={setActiveTags}
             className='dropdown-tags'/>
         </div>
+
         {/* Manually increasing the segment size for now */}
         <br></br>
         <br></br>
