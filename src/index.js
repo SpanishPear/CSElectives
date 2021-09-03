@@ -5,6 +5,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import Responses from './assets/convertcsv.json';
+import CourseData from './assets/coursesFormattedRaw.json';
+
+import { initializeApp } from 'firebase/app';
+import FirebaseConfig from './assets/firebase-config.json';
+import { getDocs, getFirestore, collection, doc, setDoc } from 'firebase/firestore';
 
 const safeParseInt = (str) => {
   const num = parseInt(str, 10);
@@ -36,8 +41,41 @@ const parseComment = (old) => {
   return com.trim();
 };
 
+const parseRecommended = (cc, old) => {
+  const recString = old['Any similar courses you think people would enjoy if they liked this course?'];
+  const courseCodes = [...recString.matchAll(/[A-Z]{4}\d{4}/g)].map((match) => match[0]);
+  return courseCodes;
+};
+
+const parseTerms = (cc, terms) => {
+  if (terms === '') return [];
+  return terms.split(',').map((term) => {
+    const comp = term.trim();
+    if (comp === 'Summer Term') return 0;
+    if (comp === 'Term 1') return 1;
+    if (comp === 'Term 2') return 2;
+    if (comp === 'Term 3') return 3;
+    console.log('invalid term???', cc, comp);
+    return -1;
+  });
+};
+
+const parseHtml = (cc, desc) => {
+  const dummyHtml = document.createElement('div');
+  dummyHtml.innerHTML = desc;
+  return dummyHtml.textContent;
+  // return desc
+  //   .replaceAll(/<.*?>/g, '')
+  //   .replaceAll(/&#39;/g, '\'')
+  //   .replaceAll(/&#34;/g, '"')
+  //   .replaceAll(/&#43;/g, '+')
+  //   .replaceAll(/&#61;/g, '=')
+  //   .replaceAll(/ +/g, ' ');
+};
+
 // Transform data into good values
 const formattedResponses = Responses.map((old) => {
+  const cc = old['Which COMP elective will you be giving your opinion on?'].toUpperCase().slice(0, 8);
   return {
     courseCode: old['Which COMP elective will you be giving your opinion on?'].toUpperCase().slice(0, 8),
     timestamp: old.Timestamp,
@@ -52,10 +90,60 @@ const formattedResponses = Responses.map((old) => {
       overall: safeParseInt(old['Overall rating'][0]),
     },
     comment: parseComment(old),
-    recommendedCourses: old['Any similar courses you think people would enjoy if they liked this course?'], // TODO
+    recommendedCourses: parseRecommended(cc, old),
   };
 });
-console.log(formattedResponses);
+// console.log(formattedResponses);
+// formattedResponses contains each review object....
+const thingToUpload = {};
+
+const relevantCourses = {};
+for (const unswCourse of Object.values(CourseData)) {
+  // if (!unswCourse.school?.includes('Computer Science and Engineering') && unswCourse.gen_ed !== 'true') continue;
+  if (!unswCourse.school?.includes('Computer Science and Engineering')) continue;
+  if (unswCourse.terms.includes('Semester') || unswCourse.terms.includes('Canberrra')) continue;
+  if (unswCourse.calendar === 'Semester') continue;
+  relevantCourses[unswCourse.code] = {
+    ...unswCourse,
+    UOC: parseInt(unswCourse.UOC, 10) || 0,
+    level: parseInt(unswCourse.level, 10) || safeParseInt(unswCourse.code[4], 10) || 0,
+    terms: parseTerms(unswCourse.code, unswCourse.terms),
+    gen_ed: unswCourse.gen_ed === 'true' ? true : false,
+    enrolment_rules: parseHtml(unswCourse.code, unswCourse.enrolment_rules),
+    description: parseHtml(unswCourse.code, unswCourse.description),
+    school: unswCourse.school || '',
+  };
+}
+// console.log(relevantCourses);
+// console.log(Object.values(relevantCourses).filter((x) => Object.keys(x).length !== 17));
+// console.log(Object.values(relevantCourses).map((x) => Object.keys(x).length));
+
+Object.values(relevantCourses).forEach((c) => {
+  if (!(c.code in thingToUpload)) {
+    thingToUpload[c.code] = { ...c, reviews: [] };
+  }
+});
+
+formattedResponses.forEach((r) => {
+  if (!(r.courseCode in thingToUpload)) {
+    console.log(r.courseCode, 'NOT FOUND IN FORMATTED JSON');
+    return;
+  }
+
+  thingToUpload[r.courseCode].reviews.push(r);
+});
+
+// console.log(thingToUpload);
+
+// const db = getFirestore(initializeApp(FirebaseConfig));
+// // const newRef = doc(collection(db, 'courses'))
+// for (const upload of Object.values(thingToUpload)) {
+//   console.log(upload);
+//   const ref = doc(db, 'courses', upload.code);
+//   // const col = collection(db, 'courses');
+//   // const ref = doc(col, 'upload.code');
+//   // setDoc(ref, upload);
+// }
 
 ReactDOM.render(
   <React.StrictMode>
