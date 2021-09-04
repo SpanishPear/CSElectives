@@ -60,6 +60,12 @@ const parseTerms = (cc, terms) => {
   });
 };
 
+const parseTimestamp = (timestampStr) => {
+  const [date, time] = timestampStr.split(' ');
+  const properStr = `${date.split('/').reverse().join('/')} ${time}`;
+  return new Date(properStr).getTime();
+};
+
 const parseHtml = (cc, desc) => {
   const dummyHtml = document.createElement('div');
   dummyHtml.innerHTML = desc;
@@ -78,9 +84,9 @@ const formattedResponses = Responses.map((old) => {
   const cc = old['Which COMP elective will you be giving your opinion on?'].toUpperCase().slice(0, 8);
   return {
     courseCode: old['Which COMP elective will you be giving your opinion on?'].toUpperCase().slice(0, 8),
-    timestamp: old.Timestamp,
+    timestamp: parseTimestamp(old.Timestamp),
     termTaken: old['When did you do this course?'],
-    author: old['Email address'],
+    author: old['Email address'].split('@')[0],
     displayAuthor: false,
     rating: {
       difficulty: safeParseInt(old['How difficult did you find this course (in terms of content)?'][0]),
@@ -94,8 +100,8 @@ const formattedResponses = Responses.map((old) => {
   };
 });
 // console.log(formattedResponses);
+// console.log(formattedResponses.map((x) => x.timestamp));
 // formattedResponses contains each review object....
-const thingToUpload = {};
 
 const relevantCourses = {};
 for (const unswCourse of Object.values(CourseData)) {
@@ -105,22 +111,33 @@ for (const unswCourse of Object.values(CourseData)) {
   if (unswCourse.calendar === 'Semester') continue;
   relevantCourses[unswCourse.code] = {
     ...unswCourse,
-    UOC: parseInt(unswCourse.UOC, 10) || 0,
+    courseCode: unswCourse.code,
+    uoc: parseInt(unswCourse.UOC, 10) || 0,
     level: parseInt(unswCourse.level, 10) || safeParseInt(unswCourse.code[4], 10) || 0,
     terms: parseTerms(unswCourse.code, unswCourse.terms),
-    gen_ed: unswCourse.gen_ed === 'true' ? true : false,
-    enrolment_rules: parseHtml(unswCourse.code, unswCourse.enrolment_rules),
+    genEd: unswCourse.gen_ed === 'true' ? true : false,
+    enrolmentRules: parseHtml(unswCourse.code, unswCourse.enrolment_rules),
     description: parseHtml(unswCourse.code, unswCourse.description),
     school: unswCourse.school || '',
+    fieldOfEducation: unswCourse.field_of_education,
+    studyLevel: unswCourse.study_level,
   };
+  delete relevantCourses[unswCourse.code].code;
+  delete relevantCourses[unswCourse.code].UOC;
+  delete relevantCourses[unswCourse.code].enrolment_rules;
+  delete relevantCourses[unswCourse.code].gen_ed;
+  delete relevantCourses[unswCourse.code].field_of_education;
+  delete relevantCourses[unswCourse.code].study_level;
+  delete relevantCourses[unswCourse.code].enrolment_rules;
 }
-// console.log(relevantCourses);
+// console.log('relevant courses', relevantCourses);
 // console.log(Object.values(relevantCourses).filter((x) => Object.keys(x).length !== 17));
 // console.log(Object.values(relevantCourses).map((x) => Object.keys(x).length));
 
+const thingToUpload = {};
 Object.values(relevantCourses).forEach((c) => {
-  if (!(c.code in thingToUpload)) {
-    thingToUpload[c.code] = { ...c, reviews: [] };
+  if (!(c.courseCode in thingToUpload)) {
+    thingToUpload[c.courseCode] = { ...c, reviews: [] };
   }
 });
 
@@ -133,15 +150,12 @@ formattedResponses.forEach((r) => {
   thingToUpload[r.courseCode].reviews.push(r);
 });
 
-// console.log(thingToUpload);
+console.log('uploading', thingToUpload);
 
 // const db = getFirestore(initializeApp(FirebaseConfig));
-// // const newRef = doc(collection(db, 'courses'))
 // for (const upload of Object.values(thingToUpload)) {
 //   console.log(upload);
-//   const ref = doc(db, 'courses', upload.code);
-//   // const col = collection(db, 'courses');
-//   // const ref = doc(col, 'upload.code');
+//   const ref = doc(db, 'courses', upload.courseCode);
 //   // setDoc(ref, upload);
 // }
 
