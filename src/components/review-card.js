@@ -8,6 +8,8 @@ const ReviewCard = (props) => {
     enjoymentProgress, reviewDate, overallRating, description } = props;
 
   return (
+
+
     <div style={{ display: 'block', margin: '20px' }}>
       <Card fluid raised>
         <Card.Content>
