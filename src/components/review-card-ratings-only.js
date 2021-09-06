@@ -23,19 +23,19 @@ const RatingsCard = (props) => {
                   Overall: <Rating icon='star' defaultRating={overallRating} maxRating={5} disabled />
                 </Card.Meta>
 
-                <div className='bar-chart-rows'>
+                <div>
                   <label>Usefulness</label>
                   <Progress value={usefulProgress} total='5' progress='ratio' size='small' color='blue' />
                 </div>
-                <div className='bar-chart-rows'>
+                <div>
                   <label>Workload</label>
                   <Progress value={workloadProgress} total='5' progress='ratio' size='small' color='blue' />
                 </div>
-                <div className='bar-chart-rows'>
+                <div>
                   <label>Enjoyment</label>
                   <Progress value={enjoymentProgress} total='5' progress='ratio' size='small' color='blue' />
                 </div>
-                <div className='bar-chart-rows'>
+                <div>
                   <label>Difficulty</label>
                   <Progress value={difficultyProgress} total='5' progress='ratio' size='small' color='blue' />
                 </div>
