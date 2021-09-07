@@ -17,7 +17,7 @@ const RatingsCard = (props) => {
 
           <Grid>
             <Grid.Row className='review-row-ratings-only'>
-              <Grid.Column width={16}>
+              <Grid.Column>
                 <div className='course-review-card-header'></div>
 
                 <Grid columns={2}>
