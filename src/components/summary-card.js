@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Header, Grid, Progress, Rating } from 'semantic-ui-react';
-import LabelExampleIcon from '../components/tags.js';
-
-const placeholderActiveTags = ['Computer Networks', 'Database Systems'];
-
-const placeholderFunction = () => {};
+import { Header, Grid, Progress, Rating, Icon } from 'semantic-ui-react';
+import CoursePageTags from '../components/course-page-tags.js';
 
 const SummaryCard = (props) => {
-  const { summaryTitle, summaryLink, overallRating, numReviews, summaryDesc,
+  const { summaryTitle, summaryLink, courseCode, overallRating, numReviews, summaryDesc,
     usefulAvg, workloadAvg, difficultyAvg, enjoymentAvg } = props;
 
   return (
@@ -17,14 +13,14 @@ const SummaryCard = (props) => {
       <Grid>
         <Grid.Row className='grid-top'>
           <div className='my-course-page-tags'>
-            <LabelExampleIcon activeTags={placeholderActiveTags} setActiveTags={placeholderFunction} />
+            <CoursePageTags />
           </div>
         </Grid.Row>
         <Grid.Row className='grid-row'>
           <div>
             <Header as='h2'>{summaryTitle}</Header>
             <a href={summaryLink} rel="noreferrer" target="_blank">
-              COMP1511 Handbook
+              <Icon name='external' /> {courseCode} Handbook Page
             </a> <br />
             <Rating icon='star' defaultRating={overallRating} maxRating={5} disabled />
             {numReviews} Reviews
@@ -100,6 +96,7 @@ const SummaryCard = (props) => {
 SummaryCard.propTypes = {
   summaryTitle: PropTypes.string,
   summaryLink: PropTypes.string,
+  courseCode: PropTypes.string,
   overallRating: PropTypes.string,
   numReviews: PropTypes.string,
   summaryDesc: PropTypes.string,
