@@ -9,7 +9,9 @@ import CourseData from './assets/coursesFormattedRaw.json';
 
 import { initializeApp } from 'firebase/app';
 import FirebaseConfig from './assets/firebase-config.json';
-import { getDocs, getFirestore, collection, doc, setDoc } from 'firebase/firestore';
+import { getDocs, getFirestore, collection, doc, setDoc, addDoc } from 'firebase/firestore';
+
+const db = getFirestore(initializeApp(FirebaseConfig));
 
 const safeParseInt = (str) => {
   const num = parseInt(str, 10);
@@ -80,28 +82,40 @@ const parseHtml = (cc, desc) => {
 };
 
 // Transform data into good values
-const formattedResponses = Responses.map((old) => {
-  const cc = old['Which COMP elective will you be giving your opinion on?'].toUpperCase().slice(0, 8);
-  return {
-    courseCode: old['Which COMP elective will you be giving your opinion on?'].toUpperCase().slice(0, 8),
-    timestamp: parseTimestamp(old.Timestamp),
-    termTaken: old['When did you do this course?'],
-    author: old['Email address'].split('@')[0],
-    displayAuthor: false,
-    rating: {
-      difficulty: safeParseInt(old['How difficult did you find this course (in terms of content)?'][0]),
-      workload: safeParseInt(old['How did you find the workload?'][0]),
-      enjoyment: safeParseInt(old['How much did you enjoy this course?'][0]),
-      usefulness: safeParseInt(old['How useful did you find this course?'][0]),
-      overall: safeParseInt(old['Overall rating'][0]),
-    },
-    comment: parseComment(old),
-    recommendedCourses: parseRecommended(cc, old),
-  };
-});
-// console.log(formattedResponses);
-// console.log(formattedResponses.map((x) => x.timestamp));
-// formattedResponses contains each review object....
+// const formattedResponses = Responses.map((old) => {
+//   const cc = old['Which COMP elective will you be giving your opinion on?'].toUpperCase().slice(0, 8);
+//   return {
+//     courseCode: old['Which COMP elective will you be giving your opinion on?'].toUpperCase().slice(0, 8),
+//     timestamp: parseTimestamp(old.Timestamp),
+//     termTaken: old['When did you do this course?'],
+//     author: old['Email address'].split('@')[0],
+//     displayAuthor: false,
+//     rating: {
+//       difficulty: safeParseInt(old['How difficult did you find this course (in terms of content)?'][0]),
+//       workload: safeParseInt(old['How did you find the workload?'][0]),
+//       enjoyment: safeParseInt(old['How much did you enjoy this course?'][0]),
+//       usefulness: safeParseInt(old['How useful did you find this course?'][0]),
+//       overall: safeParseInt(old['Overall rating'][0]),
+//     },
+//     comment: parseComment(old),
+//     recommendedCourses: parseRecommended(cc, old),
+//   };
+// });
+// // console.log(formattedResponses);
+// // console.log(formattedResponses.map((x) => x.timestamp));
+// // formattedResponses contains each review object....
+
+// // UPLOAD
+// for (const review of formattedResponses) {
+//   // console.log(review);
+//   // const ref = doc(db, 'reviews');
+//   // setDoc(ref, review);
+//   const asyncUpload = async (r) => {
+//     // const docRef = await addDoc(collection(db, 'reviews'), review);
+//     console.log('review written with id', docRef.id);
+//   };
+//   asyncUpload(review);
+// }
 
 const relevantCourses = {};
 for (const unswCourse of Object.values(CourseData)) {
@@ -141,27 +155,37 @@ Object.values(relevantCourses).forEach((c) => {
   }
 });
 
-formattedResponses.forEach((r) => {
-  if (!(r.courseCode in thingToUpload)) {
-    console.log(r.courseCode, 'NOT FOUND IN FORMATTED JSON');
-    return;
-  }
+const uploadToDatabase = async (thingToUpload) => {
+  const reviewsCol = collection(db, 'reviews');
+  const reviewSnapshot = await getDocs(reviewsCol);
 
-  thingToUpload[r.courseCode].reviews.push(r);
-});
+  console.log(reviewSnapshot);
 
-console.log('uploading', thingToUpload);
+  reviewSnapshot.docs.forEach((doc) => {
+    const reviewId = doc.id;
+    const review = doc.data();
+    if (!(review.courseCode in thingToUpload)) {
+      console.log(review.courseCode, 'NOT FOUND IN FORMATTED JSON');
+      return;
+    }
+    thingToUpload[review.courseCode].reviews.push(reviewId);
+  });
 
-// const db = getFirestore(initializeApp(FirebaseConfig));
-// for (const upload of Object.values(thingToUpload)) {
-//   console.log(upload);
-//   const ref = doc(db, 'courses', upload.courseCode);
-//   // setDoc(ref, upload);
-// }
+  console.log('uploading', thingToUpload);
+
+  // UPLOAD
+  // for (const upload of Object.values(thingToUpload)) {
+  //   console.log(upload);
+  //   const ref = doc(db, 'courses', upload.courseCode);
+  //   // setDoc(ref, upload);
+  // }
+};
+uploadToDatabase(thingToUpload);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* <App /> */}
+    <h1>BoO</h1>
   </React.StrictMode>,
   document.getElementById('root'),
 );
