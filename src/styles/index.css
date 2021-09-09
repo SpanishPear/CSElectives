@@ -208,6 +208,7 @@ footer {
 .review-cards {
   display: block;
   margin: 20px;
+  width: 100%;
 }
 
 .ratings-only-review-header {
