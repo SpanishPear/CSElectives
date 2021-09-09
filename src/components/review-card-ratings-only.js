@@ -10,31 +10,13 @@ const RatingsCard = (props) => {
     enjoymentProgress, reviewDate, overallRating } = props;
 
   return (
-
-    <div className='review-cards'>
+    <div style={{ display: 'block', margin: '20px', width: '100%' }}>
       <Card fluid raised>
         <Card.Content>
-
           <Grid>
-            <Grid.Row className='review-row-ratings-only'>
-              <Grid.Column>
-                <div className='course-review-card-header'></div>
-
-                <Grid columns={2}>
-                  <Grid.Row>
-                    <Grid.Column>
-                      <Card.Header as='h3' content={reviewTitle} />
-                    </Grid.Column>
-                    <Grid.Column>
-                      <span className='course-review-card-date'>{reviewDate}</span>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
-
-                <Card.Meta className='course-review-card-star-rating'>
-                  Overall: <Rating icon='star' defaultRating={overallRating} maxRating={5} disabled />
-                </Card.Meta>
-
+            <Grid.Row>
+              <Grid.Column width={8}>
+                <Card.Header as='h3' content={reviewTitle} />
                 <div>
                   <label>Usefulness</label>
                   <Progress value={usefulProgress} total='5' progress='ratio' size='small' color='blue' />
@@ -43,6 +25,10 @@ const RatingsCard = (props) => {
                   <label>Workload</label>
                   <Progress value={workloadProgress} total='5' progress='ratio' size='small' color='blue' />
                 </div>
+
+              </Grid.Column>
+              <Grid.Column width={8}>
+                <span className='course-review-card-date'>{reviewDate}</span>
                 <div>
                   <label>Enjoyment</label>
                   <Progress value={enjoymentProgress} total='5' progress='ratio' size='small' color='blue' />
@@ -57,6 +43,8 @@ const RatingsCard = (props) => {
         </Card.Content>
       </Card>
     </div>
+
+
   );
 };
 
