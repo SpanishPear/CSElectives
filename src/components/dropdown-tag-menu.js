@@ -10,7 +10,6 @@ const DropdownTagsMenu = (props) => {
     if (activeTags.includes(text)) {
       setActiveTags(activeTags.filter((el) => el !== text));
     } else {
-      // TODO need to add it in the correct alphabetical order
       setActiveTags([...activeTags, text].sort(function(a, b) {
         return a.toLowerCase().localeCompare(b.toLowerCase());
       }));
