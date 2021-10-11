@@ -1,25 +1,24 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { Dropdown, Header, Input, Segment, Grid } from 'semantic-ui-react';
+import { Input, Segment, Grid, Image, Button } from 'semantic-ui-react';
+import scrollToElement from 'scroll-to-element';
+import { useLocation } from 'react-router-dom';
 
-import CourseReviewCard from '../components/course-review-card.js';
 import DropdownTagsMenu from '../components/dropdown-tag-menu';
 import DropdownSortMenu from '../components/dropdown-sort-menu';
-import ToggleOtherTagsButton from '../components/toggle-other-tags-button.js';
 import HomePageTags from '../components/home-page-tags.js';
-import ViewOptionsToggle from '../components/view-options-toggle.js';
 import CardGrid from '../components/card-grid.js';
 import { LoadingContext } from '../App.js';
 import '../styles/home-page.css';
 
-const createDropdownOption = (item) => {
-  return {
-    key: item,
-    text: item,
-    value: item,
-  };
-};
+import FeedbackSvg from '../assets/illustrations/feedback.svg';
+
+const createDropdownOption = (item) => ({
+  key: item,
+  text: item,
+  value: item,
+});
 
 const sorts = [
   'Most Popular',
@@ -52,15 +51,10 @@ const prefix = [
   'SENG',
 ];
 
-
 const sortOptions = sorts.map((item) => createDropdownOption(item));
-
 const majorOptions = majors.map((item) => createDropdownOption(item));
-
 const termOptions = terms.map((item) => createDropdownOption(item));
-
 const prefixOptions = prefix.map((item) => createDropdownOption(item));
-
 
 const HomePage = (props) => {
   const loading = useContext(LoadingContext);
@@ -68,107 +62,124 @@ const HomePage = (props) => {
   const [activeMajorTags, setActiveMajorTags] = useState([]);
   const [activeTermTags, setActiveTermTags] = useState([]);
   const [activePrefixTags, setActivePrefixTags] = useState([]);
-  const [query, setQuery] = useState('Home Page');
+  const [query, setQuery] = useState('');
 
   const handleQueryChange = (e, { value }) => {
     setQuery(value);
     console.log(query);
   };
 
-  return loading ? <span>loading</span> : (
+  return (
     <>
-      <Header as='h1'>{query}</Header>
+      <section className='title-wrapper'>
+        <div className='left'>
+          <h1>
+            <span className='cs'>cs</span>
+            <span className='electives'>electives</span>
+          </h1>
+          <h2>
+            {/* {'"'}student reviews, by students, for students{'"'} by Timmy Huang?? */}
+            enhancing your student experience.
+          </h2>
 
-      {/* {Object.keys(courses).map((courseCode, i) => { */}
-      {/* return <Header key={i}>{courseCode}</Header>; */}
-      {/* })} */}
-      <Segment className="search-section-background">
-        <Input size='massive' icon='search' fluid onChange={handleQueryChange} />
-        {/* Toggle other tags button */}
-        {/* <ToggleOtherTagsButton></ToggleOtherTagsButton>*/}
-        <div className='sort-and-filter-container'>
-          <div className='sort-dropdown-parent'>
-            <div className='sort-dropdown-text'>
-              Sort by:
-            </div>
-            <div className='sort-dropdown-menu'>
-              <DropdownSortMenu options={sortOptions} />
-            </div>
-
-          </div>
-          <div className='dropdown-tags-box'>
-            <DropdownTagsMenu
-              title='Major'
-              tagOptions={majorOptions}
-              activeTags={activeMajorTags}
-              setActiveTags={setActiveMajorTags}
-              className='dropdown-tags'
-            />
-          </div>
-          <div className='dropdown-tags-box'>
-            <DropdownTagsMenu
-              title='Term'
-              tagOptions={termOptions}
-              activeTags={activeTermTags}
-              setActiveTags={setActiveTermTags}
-              className='dropdown-tags'
-            />
-          </div>
-          <div className='dropdown-tags-box'>
-            <DropdownTagsMenu
-              title='Prefix'
-              tagOptions={prefixOptions}
-              activeTags={activePrefixTags}
-              setActiveTags={setActivePrefixTags}
-              className='dropdown-tags'
-            />
-          </div>
+          <Button
+            secondary
+            content='Start reviewing!'
+            onClick={
+              () => scrollToElement('#search-section', {
+                ease: 'in-out-cube',
+                duration: 1000,
+              })
+            }
+          />
         </div>
-        {/* Manually increasing the segment size for now */}
-        <br></br>
-        <br></br>
 
-        {/* TODO
-          Add ELEC 69
-          Add ELEC 68
-          Add ELEC 69
-          Add ELEC 75
-        */}
-      </Segment>
+        <div className='right'>
+          <div className='blob' />
+          <Image className='feedback-svg' fluid src={FeedbackSvg} />
+        </div>
+      </section>
 
+      <section id="search-section">
+        <Segment>
+          <Input
+            size='massive'
+            icon='search'
+            placeholder='COMP1511'
+            fluid
+            onChange={handleQueryChange}
+            style={{ fontFamily: 'nevis, sans-serif' }}
+          />
 
-      {/* Input component: https://react.semantic-ui.com/elements/input/ *
-      <Input placeholder="You'll need a text box!"/>
-      {/* Dropdown component --> scroll to search selection to implement options:
-      https://react.semantic-ui.com/modules/dropdown/
-      <Dropdown
-        search
-        selection
-        placeholder="Or you could use a search dropdown!"
-      /> */}
+          <div className='sort-and-filter-container'>
+            <div className='sort-dropdown-parent'>
+              <div className='sort-dropdown-text'>
+                Sort by:
+              </div>
+              <div className='sort-dropdown-menu'>
+                <DropdownSortMenu options={sortOptions} />
+              </div>
+            </div>
 
-      {/* Tags component */}
-      <div className='my-front-page-tags'>
-        <HomePageTags
-          activeTags={activeMajorTags}
-          setActiveTags={setActiveMajorTags}
-        />
-        <HomePageTags
-          activeTags={activeTermTags}
-          setActiveTags={setActiveTermTags}
-        />
-        <HomePageTags
-          activeTags={activePrefixTags}
-          setActiveTags={setActivePrefixTags}
-        />
-      </div>
+            <div className='dropdown-tags-box'>
+              <DropdownTagsMenu
+                title='Major'
+                tagOptions={majorOptions}
+                activeTags={activeMajorTags}
+                setActiveTags={setActiveMajorTags}
+                className='dropdown-tags'
+              />
+            </div>
+            <div className='dropdown-tags-box'>
+              <DropdownTagsMenu
+                title='Term'
+                tagOptions={termOptions}
+                activeTags={activeTermTags}
+                setActiveTags={setActiveTermTags}
+                className='dropdown-tags'
+              />
+            </div>
+            <div className='dropdown-tags-box'>
+              <DropdownTagsMenu
+                title='Prefix'
+                tagOptions={prefixOptions}
+                activeTags={activePrefixTags}
+                setActiveTags={setActivePrefixTags}
+                className='dropdown-tags'
+              />
+            </div>
+          </div>
+        </Segment>
 
-      {/* Check out the Dropdown component page for examples of inline dropdowns, and filter dropdowns */}
+        {/* Tags component */}
+        <div className='front-page-tags'>
+          <HomePageTags
+            activeTags={activeMajorTags}
+            setActiveTags={setActiveMajorTags}
+            category='major'
+          />
 
-      {/* Code, name and desc hardcoded for testing purposes */}
-      <Grid stackable doubling columns={3}>
-        <CardGrid courses={courses} />
-      </Grid>
+          <HomePageTags
+            activeTags={activeTermTags}
+            setActiveTags={setActiveTermTags}
+            category='term'
+          />
+
+          <HomePageTags
+            activeTags={activePrefixTags}
+            setActiveTags={setActivePrefixTags}
+            category='prefix'
+          />
+
+        </div>
+
+        {/* Code, name and desc hardcoded for testing purposes */}
+        {loading ? <span>loading...</span> : (
+          <Grid centered stackable doubling container columns='equal'>
+            <CardGrid courses={courses} />
+          </Grid>
+        )}
+      </section>
     </>
   );
 };
