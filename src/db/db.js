@@ -8,7 +8,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 
-import { getDocs, getFirestore, collection, addDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore/lite';
+import { getDocs, getFirestore, collection, addDoc, doc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore/lite';
 
 import FirebaseConfig from '../assets/firebase-config.json';
 
@@ -123,6 +123,17 @@ class Database {
     });
 
     return docRef.id;
+  }
+
+  /**
+   *
+   * @param {*} item
+   * @param {*} colName
+   * @param {*} docName
+   */
+  async temp(item, colName, docName) {
+    await setDoc(doc(this.db, colName, docName), item);
+    // await addDoc(collection(this.db, colName), item);
   }
 
   /**
