@@ -13,6 +13,7 @@ import { LoadingContext } from '../App.js';
 import '../styles/home-page.css';
 
 import FeedbackSvg from '../assets/illustrations/feedback.svg';
+import ScrollButton from '../components/scroll-button.js';
 
 const createDropdownOption = (item) => ({
   key: item,
@@ -21,10 +22,11 @@ const createDropdownOption = (item) => ({
 });
 
 const sorts = [
-  'Most Popular',
+  'Highest Rated',
+  'Most Reviews',
   'Most Useful',
   'Most Enjoyable',
-  'Lowest Difficulty',
+  'Best Workload',
 ];
 
 const majors = [
@@ -58,10 +60,11 @@ const prefixOptions = prefix.map((item) => createDropdownOption(item));
 
 const HomePage = (props) => {
   const loading = useContext(LoadingContext);
-  const { courses } = props;
+  const { courses, majors } = props;
   const [activeMajorTags, setActiveMajorTags] = useState([]);
   const [activeTermTags, setActiveTermTags] = useState([]);
   const [activePrefixTags, setActivePrefixTags] = useState([]);
+  const [activeSort, setActiveSort] = useState('Highest Rated');
   const [query, setQuery] = useState('');
 
   const handleQueryChange = (e, { value }) => {
@@ -69,8 +72,13 @@ const HomePage = (props) => {
     console.log(query);
   };
 
+  console.log(majors);
+
   return (
     <>
+      <div className='scroll-button-container'>
+        <ScrollButton />
+      </div>
       <section className='title-wrapper'>
         <div className='left'>
           <h1>
@@ -117,7 +125,11 @@ const HomePage = (props) => {
                 Sort by:
               </div>
               <div className='sort-dropdown-menu'>
-                <DropdownSortMenu options={sortOptions} />
+                <DropdownSortMenu
+                  activeSort={activeSort}
+                  setActiveSort={setActiveSort}
+                  options={sortOptions}
+                />
               </div>
             </div>
 
@@ -176,7 +188,14 @@ const HomePage = (props) => {
         {/* Code, name and desc hardcoded for testing purposes */}
         {loading ? <span>loading...</span> : (
           <Grid centered stackable doubling container columns='equal'>
-            <CardGrid courses={courses} />
+            <CardGrid
+              courses={courses}
+              majors={majors}
+              activeMajorTags={activeMajorTags}
+              activeTermTags={activeTermTags}
+              activePrefixTags={activePrefixTags}
+              activeSort={activeSort}
+            />
           </Grid>
         )}
       </section>
@@ -186,6 +205,7 @@ const HomePage = (props) => {
 
 HomePage.propTypes = {
   courses: PropTypes.object,
+  majors: PropTypes.object,
 };
 
 export default HomePage;
