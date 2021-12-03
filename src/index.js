@@ -15,57 +15,60 @@ import './styles/index.css';
 
 const db = getFirestore(initializeApp(FirebaseConfig));
 
-const majors = {
-  'Artifical Intelligence': ['COMP3431', 'COMP4418', 'COMP9318', 'COMP9417', 'COMP9418', 'COMP9444', 'COMP9517'],
-  'Computer Networks': ['COMP4336', 'COMP4337', 'COMP6733', 'COMP9332', 'COMP9334'],
-  'Database Systems': ['COMP6714', 'COMP9313', 'COMP9315', 'COMP9318', 'COMP9319'],
-  'eCommerce Systems': ['COMP3511', 'COMP9321', 'COMP9322', 'COMP9323'],
-  'Programming Languages': ['COMP3131', 'COMP3141', 'COMP3151', 'COMP6771'],
-  'Security Engineering': [
-    'COMP4337', 'COMP6443', 'COMP6445', 'COMP6447', 'COMP6448',
-    'COMP6449', 'COMP6843', 'COMP6845', 'COMP9447', 'MATH3411', 'TELE3119',
-  ],
-};
+// const majors = {
+//   'Artifical Intelligence': ['COMP3431', 'COMP4418', 'COMP9318', 'COMP9417', 'COMP9418', 'COMP9444', 'COMP9517'],
+//   'Computer Networks': ['COMP4336', 'COMP4337', 'COMP6733', 'COMP9332', 'COMP9334'],
+//   'Database Systems': ['COMP6714', 'COMP9313', 'COMP9315', 'COMP9318', 'COMP9319'],
+//   'eCommerce Systems': ['COMP3511', 'COMP9321', 'COMP9322', 'COMP9323'],
+//   'Programming Languages': ['COMP3131', 'COMP3141', 'COMP3151', 'COMP6771'],
+//   'Security Engineering': [
+//     'COMP4337', 'COMP6443', 'COMP6445', 'COMP6447', 'COMP6448',
+//     'COMP6449', 'COMP6843', 'COMP6845', 'COMP9447', 'MATH3411', 'TELE3119',
+//   ],
+// };
 
-const upload = {
-  'COMPI1': {
-    title: 'Artifical Intelligence',
-    courses: ['COMP3431', 'COMP4418', 'COMP9318', 'COMP9417', 'COMP9418', 'COMP9444', 'COMP9517'],
-  },
-  'COMPN1': {
-    title: 'Computer Networks',
-    courses: ['COMP4336', 'COMP4337', 'COMP6733', 'COMP9332', 'COMP9334'],
-  },
-  'COMPD1': {
-    title: 'Database Systems',
-    courses: ['COMP6714', 'COMP9313', 'COMP9315', 'COMP9318', 'COMP9319'],
-  },
-  'COMPE1': {
-    title: 'eCommerce Systems',
-    courses: ['COMP3511', 'COMP9321', 'COMP9322', 'COMP9323'],
-  },
-  'COMPJ1': {
-    title: 'Programming Languages',
-    courses: ['COMP3131', 'COMP3141', 'COMP3151', 'COMP6771'],
-  },
-  'COMPY1': {
-    title: 'Security Engineering',
-    courses: [
-      'COMP4337', 'COMP6443', 'COMP6445', 'COMP6447', 'COMP6448',
-      'COMP6449', 'COMP6843', 'COMP6845', 'COMP9447', 'MATH3411', 'TELE3119',
-    ],
-  },
-};
+// const upload = {
+//   'COMPI1': {
+//     title: 'Artifical Intelligence',
+//     courses: ['COMP3431', 'COMP4418', 'COMP9318', 'COMP9417', 'COMP9418', 'COMP9444', 'COMP9517'],
+//   },
+//   'COMPN1': {
+//     title: 'Computer Networks',
+//     courses: ['COMP4336', 'COMP4337', 'COMP6733', 'COMP9332', 'COMP9334'],
+//   },
+//   'COMPD1': {
+//     title: 'Database Systems',
+//     courses: ['COMP6714', 'COMP9313', 'COMP9315', 'COMP9318', 'COMP9319'],
+//   },
+//   'COMPE1': {
+//     title: 'eCommerce Systems',
+//     courses: ['COMP3511', 'COMP9321', 'COMP9322', 'COMP9323'],
+//   },
+//   'COMPJ1': {
+//     title: 'Programming Languages',
+//     courses: ['COMP3131', 'COMP3141', 'COMP3151', 'COMP6771'],
+//   },
+//   'COMPY1': {
+//     title: 'Security Engineering',
+//     courses: [
+//       'COMP4337', 'COMP6443', 'COMP6445', 'COMP6447', 'COMP6448',
+//       'COMP6449', 'COMP6843', 'COMP6845', 'COMP9447', 'MATH3411', 'TELE3119',
+//     ],
+//   },
+// };
 
 const doSomething = async () => {
-  // const courses = await Database.getCoursesAndReviews();
-  // console.log(courses);
+  const reviews = await Database.getReviews();
+  console.log(reviews);
+
   // eslint-disable-next-line guard-for-in
-  // for (const code in upload) {
-  //   await Database.temp(upload[code], 'majors', code);
-  // }
-  // await Database.temp(upload, 'majors');
-};
+//   for (const reviewId in reviews) {
+//     const ro = reviews[reviewId];
+//     ro.rating.manageability = 6 - ro.rating.workload;
+//     // console.log(ro);
+//     await Database.updateReview(reviewId, ro);
+//   }
+// };
 doSomething();
 
 // const uploadToDatabase = async (thingToUpload) => {
